@@ -6,6 +6,12 @@ use Illuminate\Support\Facades\Route;
 
 
 
-Route::post('/job-categories',[\App\Http\Controllers\JobCategoryController::class,'store']);
+Route::group(['middleware' => ['auth:sanctum']], function () {
 
-Route::get('/job-categories',[\App\Http\Controllers\JobCategoryController::class,'index']);
+    Route::get('/job-categories',[\App\Http\Controllers\JobCategoryController::class,'index']);
+    Route::post('/job-categories',[\App\Http\Controllers\JobCategoryController::class,'store']);
+
+
+});
+
+

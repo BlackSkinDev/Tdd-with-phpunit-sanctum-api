@@ -16,7 +16,6 @@ class JobCategoryTest extends TestCase
     // create job category
     public function test_if_category_can_be_created(){
         $this->withExceptionHandling();
-
         Sanctum::actingAs(User::factory()->create());
         $title = 'Engineering';
         $payload = ['title'=>$title];
@@ -63,7 +62,8 @@ class JobCategoryTest extends TestCase
     }
 
     public function test_if_job_categories_can_be_fetched(){
-        //$this->withExceptionHandling();
+
+        Sanctum::actingAs(User::factory()->create());
         $jobCategory = JobCategory::factory()->create();
         $headers = [
             'Accept'=>'application/json'
@@ -80,6 +80,14 @@ class JobCategoryTest extends TestCase
                 ]
         ]);
 
+    }
+
+    public function test_if_unauthenticated_cannot_access_protected_routes(){
+        $index= $this->json('GET','api/job-categories');
+        $index->assertStatus(401);
+
+        $savePost = $this->json('POST','api/job-categories',['title'=>'Sample Job Category']);
+        $savePost->assertStatus(401);
     }
 
 
